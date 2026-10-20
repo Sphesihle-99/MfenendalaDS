@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mfene'Ndala Digital Services | Web Development, Marketing & Design</title>
+  <meta name="description" content="Ohlakaniphile. Oqinile. Owakho. Expert digital services in Kugompo City 5219. Websites, Marketing, Design. WhatsApp: 063 203 0196" />
+  <link rel="icon" href="logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --color-primary: #007A4D;
+      --color-primary-dark: #005a3a;
+      --color-accent: #FFD700;
+      --color-accent-dark: #e6c200;
+      --color-black: #000;
+      --color-bg-light: #f9f9f9;
+      --color-bg-dark: #121212;
+      --color-text-light: #333;
+      --color-text-dark: #e0e0e0;
+      --transition: 0.3s ease;
+      --border-radius: 12px;
+      --max-width: 1200px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.7;
+      background: var(--color-bg-light);
+      color: var(--color-text-light);
+      padding-top: 75px;
+      scroll-behavior: smooth;
+      transition: background-color var(--transition), color var(--transition);
+    }
+    body.dark-mode { background-color: var(--color-bg-dark); color: var(--color-text-dark); }
+    a { color: inherit; text-decoration: none; }
+    
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(0, 122, 77, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      transition: background var(--transition);
+    }
+    header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    nav {
+      max-width: var(--max-width); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem;
+    }
+    .logo a { 
+      font-size: 1.2rem; 
+      font-weight: bold; 
+      color: white; 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+    }
+    .logo img { 
+      height: 50px; 
+      width: 50px; 
+      border-radius: 50%; 
+      object-fit: cover; 
+      border: 2px solid var(--color-accent); 
+      background: white;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .logo-text .brand-name {
+      font-size: 1.1rem;
+      color: var(--color-accent);
+    }
+    .logo-text .brand-tag {
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+    #menu-toggle { display: none; font-size: 2rem; background: none; border: none; color: white; cursor: pointer; }
+    ul.nav-links { list-style: none; display: flex; gap: 1.5rem; }
+    ul.nav-links li a { color: white; font-weight: 600; padding: 0.5rem 0.8rem; border-radius: 5px; transition: background var(--transition); }
+    ul.nav-links li a:hover { background-color: var(--color-accent); color: var(--color-black); }
+    #dark-mode-toggle { font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
+
+    @media (max-width: 768px) {
+      #menu-toggle { display: block; }
+      ul.nav-links {
+        position: fixed; top: 75px; right: 0; background-color: var(--color-primary);
+        flex-direction: column; width: 220px; height: calc(100% - 75px);
+        padding: 1.5rem; transform: translateX(100%); transition: transform var(--transition);
+      }
+      ul.nav-links.active { transform: translateX(0); }
+      .logo-text .brand-name { font-size: 0.9rem; }
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
+      color: var(--color-black);
+      padding: 0.9rem 2.2rem; font-weight: 700; border: none;
+      border-radius: 30px; cursor: pointer; text-decoration: none;
+      display: inline-block; margin: 5px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+    }
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+      padding: 0.9rem 2.2rem; font-weight: 700; border: none;
+      border-radius: 30px; cursor: pointer; display: inline-block; margin: 5px;
+      transition: transform var(--transition);
+    }
+    .btn-whatsapp:hover { transform: translateY(-3px); background: #1ebe5d; }
+
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,122,77,0.6)), url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1470&q=80') no-repeat center/cover;
+      color: white; min-height: 85vh; display: flex; align-items: center; text-align: center; padding: 4rem 1rem;
+    }
+    .hero-content { max-width: 850px; margin: 0 auto; }
+    .hero h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+    .hero .slogan { font-size: 1.4rem; color: var(--color-accent); font-weight: 700; margin-bottom: 1rem; }
+    .hero p { font-size: 1.2rem; margin-bottom: 1.5rem; }
+    .trust-bar { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 2rem; font-weight: 600; }
+    .trust-bar span { background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px; }
+
+    .container { width: 90%; max-width: var(--max-width); margin: 0 auto; }
+    section { padding: 5rem 0; }
+    h2 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--color-primary); text-align: center; }
+    body.dark-mode h2 { color: var(--color-accent); }
+    .section-subtitle { text-align: center; max-width: 700px; margin: 0 auto 3rem; color: #666; }
+
+    .service-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+    .service-item {
+      background: white; padding: 2.5rem; border-radius: var(--border-radius);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: transform var(--transition);
+      border-top: 4px solid transparent;
+    }
+    .service-item:hover { transform: translateY(-10px); border-top: 4px solid var(--color-accent); }
+    body.dark-mode .service-item { background: #222; }
+    .service-item h3 { color: var(--color-primary); font-size: 1.6rem; margin-bottom: 1rem; }
+    .service-item ul { list-style: none; padding-left: 0; margin: 1rem 0; }
+    .service-item ul li { padding: 0.3rem 0; }
+    .service-item ul li::before { content: "✓ "; color: var(--color-primary); font-weight: bold; }
+
+    .chart-container {
+      max-width: 500px;
+      margin: 3rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+    body.dark-mode .chart-container { background: #222; }
+    .chart-title { text-align: center; margin-bottom: 1rem; color: var(--color-primary); }
+
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+    .stat-box { background: var(--color-primary); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center; }
+    .stat-box h4 { font-size: 2rem; color: var(--color-accent); }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+      max-width: 900px; margin: 2rem auto;
+    }
+    .contact-info p { margin: 1rem 0; font-size: 1.1rem; }
+    .qr-box { text-align: center; background: white; padding: 1.5rem; border-radius: var(--border-radius); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .qr-box img { width: 200px; height: 200px; border-radius: 10px; }
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+
+    /* CHAT POPUP */
+    .chat-popup {
+      position: fixed;
+      bottom: 160px;
+      right: 20px;
+      width: 320px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 9999;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+    }
+    body.dark-mode .chat-popup { background: #222; }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .chat-header {
+      background: var(--color-primary);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .chat-header img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--color-accent); }
+    #close-chat { margin-left: auto; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
+    .chat-body { padding: 1rem; font-size: 0.9rem; }
+    .chat-body p { background: #f1f1f1; padding: 0.8rem; border-radius: 10px; margin: 0.5rem 0; }
+    body.dark-mode .chat-body p { background: #333; }
+    .chat-footer { padding: 1rem; text-align: center; border-top: 1px solid #ddd; }
+
+    footer { background: var(--color-black); color: white; text-align: center; padding: 2rem 1rem; }
+    #back-to-top { position: fixed; bottom: 30px; right: 30px; display: none; background-color: var(--color-primary); color: white; border: none; padding: 0.75rem 1rem; border-radius: 50%; cursor: pointer; font-size: 1.5rem; z-index: 1000; }
+    #chatbot-toggle { position: fixed; bottom: 90px; right: 20px; width: 56px; height: 56px; border: none; border-radius: 50%; background: #25D366; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10000; }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">
+      <a href="#">
+        <img src="logo.png" alt="MfeneNdala Logo">
+        <div class="logo-text">
+          <span class="brand-name">Mfene'Ndala</span>
+          <span class="brand-tag">DIGITAL SERVICES</span>
+        </div>
+      </a>
+    </div>
+    <button id="menu-toggle">☰</button>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button id="dark-mode-toggle">🌙</button>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="hero">
+    <div class="hero-content container">
+      <h1>Mfene'Ndala Digital Services</h1>
+      <p class="slogan">Ohlakaniphile. Oqinile. Owakho.</p>
+      <p>We help businesses in <strong>Kugompo City, 5219</strong> look professional online and get more customers. From stunning websites to marketing that actually works.</p>
+      <div>
+        <a href="#services" class="btn-primary">See What We Do</a>
+        <a href="https://wa.me/27632030196" target="_blank" class="btn-whatsapp">WhatsApp: 063 203 0196</a>
+      </div>
+      <div class="trust-bar">
+        <span>⭐ 48hr Response</span> <span>🚀 Websites in 7 Days</span> <span>🇿🇦 Proudly SA Owned</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="container">
+    <h2>What We Do Best</h2>
+    <p class="section-subtitle">Digital solutions that are smart, strong, and built for YOU.</p>
+    <div class="service-list">
+      <article class="service-item">
+        <h3>Web Development</h3>
+        <p>Your website is your 24/7 salesman. We build fast, mobile-first sites that rank on Google.</p>
+        <ul>
+          <li>Responsive websites for phone + desktop</li>
+          <li>SEO optimization to get found on Google</li>
+          <li>E-commerce stores & booking systems</li>
+          <li>3 Month free support</li>
+        </ul>
+        <p><strong>Starting at R9,500</strong></p>
+        <a href="#contact" class="btn-primary">Get Free Quote</a>
+      </article>
+      <article class="service-item">
+        <h3>Digital Marketing</h3>
+        <p>We run targeted ads and content that puts you in front of customers ready to buy.</p>
+        <ul>
+          <li>Facebook & Instagram Ads Management</li>
+          <li>Google SEO to rank #1 locally</li>
+          <li>Social Media content + branding</li>
+          <li>WhatsApp Business setup</li>
+        </ul>
+        <p><strong>Starting at R5,500/month</strong></p>
+        <a href="#contact" class="btn-primary">Get Free Quote</a>
+      </article>
+      <article class="service-item">
+        <h3>Graphic Design & Branding</h3>
+        <p>Logos, posters, and brand identities that make people remember you and trust you.</p>
+        <ul>
+          <li>Logo design + Brand guidelines</li>
+          <li>Social media posts + banners</li>
+          <li>Business cards, flyers, menus</li>
+          <li>Packaging design</li>
+        </ul>
+        <p><strong>Starting at R3,500</strong></p>
+        <a href="#contact" class="btn-primary">Get Free Quote</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="container">
+    <h2>Our Focus Areas</h2>
+    <p class="section-subtitle">Service breakdown based on projects completed for clients in Kugompo City, 5219</p>
+    <div class="chart-container">
+      <h3 class="chart-title">2026 Project Distribution</h3>
+      <canvas id="servicesChart"></canvas>
+    </div>
+  </section>
+
+  <section id="about" class="container">
+    <h2>About Mfene'Ndala</h2>
+    <div class="about-grid">
+      <div>
+        <h3>The Wise One Behind Your Growth</h3>
+        <p>We are <strong>Mfene'Ndala Digital Services</strong> - based in <strong>Kugompo City, 5219</strong>. The name means "The Wise Baboon" because we solve problems with intelligence and strategy.</p>
+        <div class="about-stats">
+          <div class="stat-box"><h4>50+</h4><p>Happy Clients</p></div>
+          <div class="stat-box"><h4>7 Days</h4><p>Website Delivery</p></div>
+        </div>
+      </div>
+      <div>
+        <h3>Our Mission</h3>
+        <p><strong>Ohlakaniphile:</strong> Smart solutions using the latest tech</p>
+        <p><strong>Oqinile:</strong> Strong, reliable support</p>
+        <p><strong>Owakho:</strong> 100% tailored to your business</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="container">
+    <h2>Let's Build Something Great</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Contact Details</h3>
+        <p><strong>Location:</strong> Kugompo City, 5219, South Africa</p>
+        <p><strong>WhatsApp:</strong> <a href="https://wa.me/27632030196">063 203 0196</a></p>
+        <p><strong>Email:</strong> <a href="mailto:Sphesihle99@outlook.com">Sphesihle99@outlook.com</a></p>
+        <a href="https://wa.me/27632030196" target="_blank" class="btn-whatsapp">Chat on WhatsApp Now</a>
+      </div>
+      <div class="qr-box">
+        <h3>Scan to Chat</h3>
+        <img src="WhatsApp QR.png" alt="WhatsApp QR Code for MfeneNdala">
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 Mfene'Ndala Digital Services | Kugompo City, 5219. Ohlakaniphile. Oqinile. Owakho.</p>
+</footer>
+
+<button id="back-to-top">↑</button>
+<button id="chatbot-toggle">💬</button>
+
+<!-- WHATSAPP CHAT POPUP -->
+<div id="chat-popup" class="chat-popup">
+  <div class="chat-header">
+    <img src="logo.png" alt="Logo">
+    <div>
+      <h4>Mfene'Ndala Support</h4>
+      <span>Usually replies in 5 min</span>
+    </div>
+    <button id="close-chat">×</button>
+  </div>
+  <div class="chat-body">
+    <p>Hi 👋 Welcome to Mfene'Ndala Digital Services</p>
+    <p>How can we help you grow your business today?</p>
+  </div>
+  <div class="chat-footer">
+    <a href="https://wa.me/27632030196?text=Hi%20MfeneNdala,%20I%20need%20help%20with%20" target="_blank" class="btn-whatsapp">
+      Chat on WhatsApp
+    </a>
+  </div>
+</div>
+
+<script>
+  document.getElementById('menu-toggle').onclick = () => {
+    document.querySelector('.nav-links').classList.toggle('active');
+  };
+  document.getElementById('dark-mode-toggle').onclick = () => {
+    document.body.classList.toggle('dark-mode');
+  };
+  window.onscroll = () => {
+    document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
+    document.getElementById('back-to-top').style.display = window.scrollY > 300 ? 'block' : 'none';
+  };
+  document.getElementById('back-to-top').onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+
+  // CHATBOT TOGGLE
+  const chatToggle = document.getElementById('chatbot-toggle');
+  const chatPopup = document.getElementById('chat-popup');
+  const closeChat = document.getElementById('close-chat');
+  chatToggle.onclick = () => {
+    chatPopup.style.display = chatPopup.style.display === 'block' ? 'none' : 'block';
+  }
+  closeChat.onclick = () => { chatPopup.style.display = 'none'; }
+
+  // PIE CHART
+  const ctx = document.getElementById('servicesChart').getContext('2d');
+  const servicesChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Web Development', 'Digital Marketing', 'Graphic Design'],
+      datasets: [{
+        data: [45, 35, 20],
+        backgroundColor: ['#007A4D', '#FFD700', '#000'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } }
+  });
+</script>
+
+</body>
+</html>
